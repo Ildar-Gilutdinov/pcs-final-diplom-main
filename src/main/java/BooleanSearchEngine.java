@@ -9,7 +9,6 @@ import java.util.*;
 public class BooleanSearchEngine implements SearchEngine {
 
     private Map<String, List<PageEntry>> listMap = new HashMap<>();
-    ;
 
     public BooleanSearchEngine(File pdfsDir) throws IOException {
         // прочтите тут все pdf и сохраните нужные данные,
