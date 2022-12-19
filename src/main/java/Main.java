@@ -19,31 +19,17 @@ public class Main {
         try (ServerSocket serverSocket = new ServerSocket(PORT);) {
             System.out.println("Сервер запущен!");
             Gson gson = new Gson();
-            try (Socket socket = serverSocket.accept(); // ждем подключения
-                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); PrintWriter out = new PrintWriter(socket.getOutputStream(), true);) {
+            // TODO: 19.12.2022 Корректировка замечаний
+            while (true) { // в цикле(!) принимаем подключения
+                try (Socket socket = serverSocket.accept(); // ждем подключения
+                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); PrintWriter out = new PrintWriter(socket.getOutputStream(), true);) {
 // TODO: 13.12.2022 Вариант 1
-
-//                out.println("Введите слово для поиска: ");
-//                String word = in.readLine();
-//                List<PageEntry> searchResult = engine.search(word);
-//                out.println(gson.toJson(searchResult));
-
-// TODO: 13.12.2022 Вариант 2
-
-                while (true) {
-                    try {
-                        System.out.println("Введите слово для поиска: ");
-                        Scanner scanner = new Scanner(System.in);
-                        String wordServer = scanner.nextLine();//вводим слово для поиска
-                        out.println(wordServer); // выводим слово для поиска
-                        wordServer = in.readLine(); //считываем название
-                        System.out.println("Запрос сервера клиенту для поиска: " + wordServer);
-                        List<PageEntry> words = engine.search(wordServer);
-                        out.println(gson.toJson(words));
-                    } catch (Exception e) {
-                        System.out.println("Данного слова нет в тексте, введите другое " + e);
-                        continue;
-                    }
+                    // TODO: 19.12.2022 Корректировка замечаний
+                    //  Ничего кроме ответа на запрос писаться в подключение не должно
+                    out.println();
+                    String word = in.readLine();
+                    List<PageEntry> searchResult = engine.search(word);
+                    out.println(gson.toJson(searchResult));
                 }
             }
         } catch (IOException e) {

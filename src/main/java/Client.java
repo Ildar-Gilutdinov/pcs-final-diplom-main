@@ -13,25 +13,15 @@ public class Client {
     public static void main(String[] args) {
         try (Socket clientSocket = new Socket(HOST, PORT); PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true); BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
 // TODO: 13.12.2022 Вариант 1
+            Scanner scanner = new Scanner(System.in);
+            String questionServer = in.readLine();
+            System.out.println(questionServer);
+            String answerServer = scanner.nextLine();
+            out.println(answerServer);
+            String reportServer = in.readLine();
+            System.out.println(reportServer);
+            scanner.close();
 
-//            Scanner scanner = new Scanner(System.in);
-//            String questionServer = in.readLine();
-//            System.out.println(questionServer);
-//            String answerServer = scanner.nextLine();
-//            out.println(answerServer);
-//            String reportServer = in.readLine();
-//            System.out.println(reportServer);
-//            scanner.close();
-
-// TODO: 13.12.2022 Вариант 2
-            while (true) {
-                System.out.println("Соединение с сервером");
-                String wordClient = in.readLine();
-                out.println(wordClient);
-                System.out.println("Ответ от клиента серверу , ваше слово принято " + wordClient);
-                wordClient = in.readLine();
-                System.out.println(wordClient);
-            }
         } catch (IOException e) {
             System.out.println("Не могу стартовать сервер");
             e.printStackTrace();

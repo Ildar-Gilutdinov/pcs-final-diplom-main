@@ -5,14 +5,18 @@ import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.ToDoubleBiFunction;
 
 public class BooleanSearchEngine implements SearchEngine {
 
     private Map<String, List<PageEntry>> listMap = new HashMap<>();
+    private List<PageEntry> pageEntryResult = new ArrayList<>();
 
     public BooleanSearchEngine(File pdfsDir) throws IOException {
         // прочтите тут все pdf и сохраните нужные данные,
         // тк во время поиска сервер не должен уже читать файлы
+//        List<PageEntry> pageEntryResult = new ArrayList<>(listMap.get(word.toLowerCase()));
+//        pageEntryResult.sort(Collections.reverseOrder()); //метод sort(), который сортирует массив в порядке возрастания.
         for (File file : pdfsDir.listFiles()) { //Проходим циклом for each
             // (метод, позволяющий прочитать список только определенных файлов)
             //Создаем экземпляр PdfDocument
@@ -42,6 +46,13 @@ public class BooleanSearchEngine implements SearchEngine {
                     } else {
                         listMap.get(word).add(pageEntry);
                     }
+                    // TODO: 19.12.2022 перенесено корректировка замечаний
+//                  Сортировка это достаточно затратное дело, поэтому лучше сортировку ответа было сделать на этапе индексации,
+//                  а на этапе запроса выдавать уже готовый отсортированный вариант,
+//                  а не сортировать каждый раз на запрос. Так работало бы быстрее
+
+                    pageEntryResult = new ArrayList<>(listMap.get(word.toLowerCase()));
+                    pageEntryResult.sort(Collections.reverseOrder()); //метод sort(), который сортирует массив в порядке возрастания.
                 }
             }
         }
@@ -54,8 +65,10 @@ public class BooleanSearchEngine implements SearchEngine {
         if ((word == null) || (word.isEmpty())) { // проверка на отсутствие искомого слова
             return Collections.emptyList();
         }
-        List<PageEntry> pageEntryResult = new ArrayList<>(listMap.get(word.toLowerCase()));
-        pageEntryResult.sort(Collections.reverseOrder()); //метод sort(), который сортирует массив в порядке возрастания.
+
+        // TODO: 19.12.2022 перенесено в цикл сортировки for (String word : freqs.keySet()) в методе BooleanSearchEngine(File pdfsDir)
+//        pageEntryResult = new ArrayList<>(listMap.get(word.toLowerCase()));
+//        pageEntryResult.sort(Collections.reverseOrder()); //метод sort(), который сортирует массив в порядке возрастания.
         // Для сортировки массива в порядке убывания метод reverseOrder() класса Collections.
         return pageEntryResult;
     }
